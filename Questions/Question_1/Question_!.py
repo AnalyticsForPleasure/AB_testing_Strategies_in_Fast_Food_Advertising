@@ -4,21 +4,11 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 
-# Scenario
-# A fast-food chain plans to add a new item to its menu. However, they are still undecided between three possible marketing campaigns for promoting the new product.
-# In order to determine which promotion has the greatest effect on sales, the new item is introduced at locations in several randomly selected markets. A different
-# promotion is used at each location, and the weekly sales of the new item are recorded for the first four weeks.
-#
-# magine you own a fast-food chain and are planning to add a new dish to the menu. This dish is your grandmother's secret
-# recipe and tastes amazing(Yum yum!). But you want others to know that as well. Up until now, you have come up with
-# three feasible marketing campaigns for promoting the new dish. In order to determine which campaign is bringing in
-# more sales, you introduce the dish at 137 different locations in 10 different markets. You come with a brilliant idea
-# to run all 3 campaigns at the locations - with a different campaign at each location and finally record the weekly
-# sales of the new dish over the first four weeks.
 
 
-# Goal
-# Evaluate A/B testing results and decide which marketing strategy works the best.
+
+#For this project, we will be working to understand the results of an A/B test run by an e-commerce website.
+# we goal is to work through this notebook to help the company understand.
 
 
 
@@ -33,7 +23,11 @@ import seaborn as sns
 # of Add to Cart: The number of users who have added the product to the cart.
 # of Purchase: The number of users who have purchased the product.
 
-
+# **************************************************************************************************************
+# Function  name: presenting_the_number_of_people_reach_campaign
+# input:
+# return value:
+# ***************************************************************************************************************
 def presenting_the_number_of_people_reach_campaign(new_df):
     # The number of people to see the ad in the campaign: (What is the total number for reach of each campaign?)
     total_result = new_df.groupby(["Campaign Name"])["Reach"].sum()
@@ -62,6 +56,49 @@ def presenting_the_number_of_people_reach_campaign(new_df):
     plt.savefig('output_chart.jpg', dpi=250, bbox_inches='tight')
     plt.show()
 
+# **************************************************************************************************************
+# Function  name: reviewing_click_through_rate_for_each_campaign
+# input:
+# return value:
+# ***************************************************************************************************************
+def reviewing_click_through_rate_for_each_campaign(new_df):
+    sns.set_style("whitegrid")
+    c = sns.color_palette(["royalblue", "lightblue"])
+    fig, ax = plt.subplots(1, 3, figsize=(16, 4), sharex=False)
+    sns.ecdfplot(x="Reach",
+                 data=new_df,
+                 hue="Campaign Name",
+                 palette="deep", ax=ax[0])
+    ax[0].set_title("ECDF for The Number of Campaign Reach", fontsize=14, color="k", pad=20)
+    ax[0].set_xlabel("Reach Number", fontsize=15)
+    ax[0].set_ylabel("ECDF", fontsize=15, color="k")
+    sns.ecdfplot(x="# of Website Clicks",
+                 data=new_df,
+                 hue="Campaign Name",
+                 palette="deep", ax=ax[1])
+    ax[1].set_title("ECDF for The Number of Campaign Clicks", fontsize=14, color="k", pad=20)
+    ax[1].set_xlabel("Website Clicks Number", fontsize=15)
+    ax[1].set_ylabel("ECDF", fontsize=15, color="k")
+    sns.set_style("white")
+    CTR = new_df.groupby(["Campaign Name"])["# of Website Clicks"].sum() / new_df.groupby(["Campaign Name"])[
+        "Reach"].sum() * 100
+    CTR.plot(kind="bar",
+             rot=0,
+             width=0.80,
+             alpha=0.9,
+             fontsize=12,
+             color=c, ax=ax[2])
+    for i, g in enumerate(CTR):
+        ax[2].text(i, g - 3, "{0:.{digits}f}%".format(g, digits=2), color='white',
+                   fontsize=19, fontweight="bold", ha="center", va='center')
+    ax[2].set_title("CTR per campaign", fontsize=14, color="k", pad=20)
+    ax[2].set_xlabel("Campaign Name", fontsize=12, fontweight="bold")
+    ax[2].set_ylabel("CTR", fontsize=15, color="k")
+    ax[2].set_xticklabels(labels=["Control", "Test"], fontsize=14);
+
+    plt.savefig('output_chart_2.jpg', dpi=250, bbox_inches='tight')
+    plt.show()
+
 
 if __name__ == '__main__':
 
@@ -82,4 +119,7 @@ if __name__ == '__main__':
     print('*')
 
     presenting_the_number_of_people_reach_campaign(new_df)
+    print('*')
+
+    reviewing_click_through_rate_for_each_campaign(new_df)
     print('*')
