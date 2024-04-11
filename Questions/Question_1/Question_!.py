@@ -10,8 +10,6 @@ import seaborn as sns
 #For this project, we will be working to understand the results of an A/B test run by an e-commerce website.
 # we goal is to work through this notebook to help the company understand.
 
-
-
 #Below is a description of this data set
 # Campaign Name: Target campaign type for ad landing page.
 # Spend [USD]: The amount of money spent on advertising in the campaign.
@@ -69,16 +67,16 @@ def reviewing_click_through_rate_for_each_campaign(new_df):
                  data=new_df,
                  hue="Campaign Name",
                  palette="deep", ax=ax[0])
-    ax[0].set_title("ECDF for The Number of Campaign Reach", fontsize=14, color="k", pad=20)
-    ax[0].set_xlabel("Reach Number", fontsize=15)
-    ax[0].set_ylabel("ECDF", fontsize=15, color="k")
+    ax[0].set_title("Empirical Cumulative Distribution Function\nof Campaign Reach Counts", fontsize=13, color="k", pad=20,fontweight="bold")
+    ax[0].set_xlabel("Reach Number", fontsize=12,fontweight="bold")
+    ax[0].set_ylabel("Empirical Cumulative Distribution Function", fontsize=12, color="k",fontweight="bold")
     sns.ecdfplot(x="# of Website Clicks",
                  data=new_df,
                  hue="Campaign Name",
                  palette="deep", ax=ax[1])
-    ax[1].set_title("ECDF for The Number of Campaign Clicks", fontsize=14, color="k", pad=20)
-    ax[1].set_xlabel("Website Clicks Number", fontsize=15)
-    ax[1].set_ylabel("ECDF", fontsize=15, color="k")
+    ax[1].set_title("Empirical Cumulative Distribution Function\nof Campaign Click Counts", fontsize=13, color="k", pad=20,fontweight="bold")
+    ax[1].set_xlabel("Number of Clicks to the Website", fontsize=12,fontweight="bold")
+    ax[1].set_ylabel("Empirical Cumulative Distribution Function", fontsize=12, color="c",fontweight="bold")
     sns.set_style("white")
     CTR = new_df.groupby(["Campaign Name"])["# of Website Clicks"].sum() / new_df.groupby(["Campaign Name"])[
         "Reach"].sum() * 100
@@ -89,12 +87,12 @@ def reviewing_click_through_rate_for_each_campaign(new_df):
              fontsize=12,
              color=c, ax=ax[2])
     for i, g in enumerate(CTR):
-        ax[2].text(i, g - 3, "{0:.{digits}f}%".format(g, digits=2), color='white',
-                   fontsize=19, fontweight="bold", ha="center", va='center')
-    ax[2].set_title("CTR per campaign", fontsize=14, color="k", pad=20)
+        ax[2].text(i, g - 3, "{0:.{digits}f}%".format(g, digits=2), color='white',fontweight="bold",
+                   fontsize=15, ha="center", va='center')
+    ax[2].set_title("CTR per campaign", fontsize=14, color="k", pad=20,fontweight="bold")
     ax[2].set_xlabel("Campaign Name", fontsize=12, fontweight="bold")
     ax[2].set_ylabel("CTR", fontsize=15, color="k")
-    ax[2].set_xticklabels(labels=["Control", "Test"], fontsize=14);
+    ax[2].set_xticklabels(labels=["Control", "Test"], fontsize=12);
 
     plt.savefig('output_chart_2.jpg', dpi=250, bbox_inches='tight')
     plt.show()
@@ -118,7 +116,7 @@ if __name__ == '__main__':
     res = new_df.isnull().sum()
     print('*')
 
-    presenting_the_number_of_people_reach_campaign(new_df)
+    #presenting_the_number_of_people_reach_campaign(new_df)
     print('*')
 
     reviewing_click_through_rate_for_each_campaign(new_df)
