@@ -4,9 +4,6 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 
-
-
-
 #For this project, we will be working to understand the results of an A/B test run by an e-commerce website.
 # we goal is to work through this notebook to help the company understand.
 
@@ -86,6 +83,7 @@ def reviewing_click_through_rate_for_each_campaign(new_df):
              alpha=0.9,
              fontsize=12,
              color=c, ax=ax[2])
+
     for i, g in enumerate(CTR):
         ax[2].text(i, g - 3, "{0:.{digits}f}%".format(g, digits=2), color='white',fontweight="bold",
                    fontsize=15, ha="center", va='center')
@@ -96,7 +94,6 @@ def reviewing_click_through_rate_for_each_campaign(new_df):
 
     plt.savefig('output_chart_2.jpg', dpi=250, bbox_inches='tight')
     plt.show()
-
 
 if __name__ == '__main__':
 
